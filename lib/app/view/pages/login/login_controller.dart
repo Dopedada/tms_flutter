@@ -3,23 +3,30 @@ import 'package:tms_flutter/app/service/api_service.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
-class LoginController extends GetxController {
+import 'package:tms_flutter/core/base/base_controller.dart';
+
+class LoginController extends BaseController {
   final Rx<int> _index = Rx<int>(0);
   int get index => _index.value;
 
   final Rx<Uint8List?> _verifyCodeImg = Rx<Uint8List?>(null);
   Uint8List? get verifyCodeImg => _verifyCodeImg.value;
 
+  final Rx<String?> _verifyKey = Rx<String?>(null);
+  String? get verifyKey => _verifyKey.value;
+
   final Rx<bool> _isLoadingVerifyCode = Rx<bool>(false);
   bool get isLoadingVerifyCode => _isLoadingVerifyCode.value;
-
-  final Rx<String?> _errorMsg = Rx<String?>(null);
-  String? get errorMsg => _errorMsg.value;
 
   final Rx<bool> _isLoggingIn = Rx<bool>(false);
   bool get isLoggingIn => _isLoggingIn.value;
 
   final _apiService = ApiService();
+
+  // 存储表单输入，方便从页面不同 widget 更新并在 login() 使用
+  final Rx<String> phone = Rx<String>('');
+  final Rx<String> imgCode = Rx<String>('');
+  final Rx<String> password = Rx<String>('');
 
   @override
   void onInit() {
@@ -29,17 +36,17 @@ class LoginController extends GetxController {
 
   Future<void> _getVerifyCode() async {
     _isLoadingVerifyCode.value = true;
-    _errorMsg.value = null;
     try {
       final response = await _apiService.getVerifyCode();
       if (response.data != null) {
         final verifyCodeData = response.data!;
         _verifyCodeImg.value = base64Decode(verifyCodeData.img);
+        _verifyKey.value = verifyCodeData.verifyKey;
       } else {
-        _errorMsg.value = '获取验证码失败: ${response.desc}';
+        showToast('获取验证码失败: ${response.desc}');
       }
     } catch (e) {
-      _errorMsg.value = '验证码加载错误: $e';
+      showToast('验证码加载错误: $e');
     } finally {
       _isLoadingVerifyCode.value = false;
     }
@@ -57,24 +64,24 @@ class LoginController extends GetxController {
     _getVerifyCode();
   }
 
-  Future<void> login(String phone, String captcha, String code) async {
-    // 表单验证
-    if (phone.isEmpty || captcha.isEmpty || code.isEmpty) {
-      _errorMsg.value = '请填写完整信息';
+  Future<void> login() async {
+    final _phone = phone.value.trim();
+    final _imgCode = imgCode.value.trim();
+    final _password = password.value;
+    final _key = verifyKey;
+
+    if (_phone.isEmpty || _imgCode.isEmpty || _password.isEmpty) {
+      showToast('请填写完整信息');
+      return;
+    }
+    if (_key == null) {
+      showToast('验证码 key 缺失，请刷新重试');
       return;
     }
 
     _isLoggingIn.value = true;
-    _errorMsg.value = null;
-    try {
-      // 调用登录 API
-      // final response = await _apiService.login(phone, captcha, code);
-      // 示例：这里需要根据实际 API 实现
-      // 成功登录后的导航逻辑
-    } catch (e) {
-      _errorMsg.value = '登录失败: $e';
-    } finally {
-      _isLoggingIn.value = false;
-    }
+    print(
+      '登录参数: account=$_phone, password=$_password, imgCode=$_imgCode, verifyKey=$_key',
+    );
   }
 }

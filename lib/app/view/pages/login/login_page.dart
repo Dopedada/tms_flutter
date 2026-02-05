@@ -36,21 +36,6 @@ class LoginPage extends GetView<LoginController> {
 
                     SizedBox(height: 10),
 
-                    // 显示错误提示
-                    if (controller.errorMsg != null)
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          controller.errorMsg!,
-                          style: TextStyle(color: Colors.red, fontSize: 12),
-                        ),
-                      ),
-
                     Visibility(
                       visible: controller.index == 1,
                       maintainSize: true,
@@ -92,7 +77,7 @@ class LoginPage extends GetView<LoginController> {
                         onPressed: controller.isLoggingIn
                             ? null
                             : () {
-                                controller.login('', '', '');
+                                controller.login();
                               },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,

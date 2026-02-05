@@ -25,5 +25,38 @@ class ApiService {
     }
   }
 
+  /// 登录
+  Future<ApiResponse<Map<String, dynamic>>> login({
+    required String account,
+    required String password,
+    required String imgCode,
+    required String verifyKey,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        'tms/login/login',
+        data: {
+          'account': account,
+          'password': password,
+          'imgCode': imgCode,
+          'verifyKey': verifyKey,
+        },
+      );
+
+      return ApiResponse<Map<String, dynamic>>.fromJson(
+        response.data as Map<String, dynamic>,
+        (data) => data as Map<String, dynamic>,
+      );
+    } catch (e) {
+      return ApiResponse<Map<String, dynamic>>(
+        code: -1,
+        data: null,
+        desc: '登录请求失败: $e',
+        status: false,
+        total: null,
+      );
+    }
+  }
+
   
 }

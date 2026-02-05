@@ -1,0 +1,14 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
+
+void showToast(required String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,         // LENGTH_SHORT 或 LENGTH_LONG
+    gravity: ToastGravity.BOTTOM,            // TOP, CENTER, BOTTOM
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.black54,
+    textColor: Colors.white,
+    fontSize: 14.0,
+  );
+}

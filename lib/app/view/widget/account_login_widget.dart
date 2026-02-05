@@ -25,6 +25,16 @@ class _Accountloginwidget extends State<Accountloginwidget> {
   void initState() {
     super.initState();
     _loginController = Get.find<LoginController>();
+    // 同步输入到 controller
+    _phoneController.addListener(() {
+      _loginController.phone.value = _phoneController.text;
+    });
+    _captchaController.addListener(() {
+      _loginController.imgCode.value = _captchaController.text;
+    });
+    _codeController.addListener(() {
+      _loginController.password.value = _codeController.text;
+    });
   }
 
   @override

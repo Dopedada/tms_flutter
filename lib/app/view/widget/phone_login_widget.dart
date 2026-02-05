@@ -25,6 +25,16 @@ class _PhoneLoginWidget extends State<PhoneLoginWidget> {
   void initState() {
     super.initState();
     _loginController = Get.find<LoginController>();
+    // 将输入内容同步到 controller 的 reactive 字段
+    _phoneController.addListener(() {
+      _loginController.phone.value = _phoneController.text;
+    });
+    _captchaController.addListener(() {
+      _loginController.imgCode.value = _captchaController.text;
+    });
+    _codeController.addListener(() {
+      _loginController.password.value = _codeController.text;
+    });
   }
 
   @override
