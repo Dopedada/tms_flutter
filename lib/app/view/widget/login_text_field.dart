@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widget_previews.dart';
 
 class LoginTextField extends StatefulWidget {
   final String title;
@@ -11,8 +10,8 @@ class LoginTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLength;
   final Widget? child;
+  final bool obscureText;
 
-  @Preview()
   const LoginTextField({
     super.key,
     this.title = "手机号",
@@ -22,6 +21,7 @@ class LoginTextField extends StatefulWidget {
     this.inputFormatters,
     this.maxLength,
     this.child,
+    this.obscureText = false,
   });
 
   @override
@@ -47,6 +47,7 @@ class _LoginTextField extends State<LoginTextField> {
               controller: widget.controller,
               inputFormatters: widget.inputFormatters,
               keyboardType: widget.keyboardType,
+              obscureText: widget.obscureText,
               decoration: InputDecoration(
                 hintText: widget.hint ?? "请输入${widget.title}",
                 border: UnderlineInputBorder(
@@ -67,17 +68,6 @@ class _LoginTextField extends State<LoginTextField> {
             ),
           ],
         ),
-
-        // Container(
-        //                 width: 90,
-        //                 height: 48,
-        //                 decoration: BoxDecoration(
-        //                   gradient: LinearGradient(
-        //                     colors: [AppColors.ColorC1C1C1, AppColors.ColorF7F7F7],
-        //                   ),
-        //                   borderRadius: BorderRadius.circular(8),
-        //                 ),
-        //               ),
         if (widget.child != null)
           Positioned(
             right: 0,

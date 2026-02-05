@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:tms_flutter/gen/assets.gen.dart';
-import 'package:tms_flutter/pages/login/LoginPage.dart';
+import 'package:get/get.dart';
+import 'package:tms_flutter/core/utils/assets_gen.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -15,14 +13,8 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // 设置 2 秒后的跳转逻辑
-    Timer(const Duration(seconds: 2), () {
-      if (mounted) {
-        // 使用 pushReplacement 确保用户点击返回键时不会回到闪屏页
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
-      }
+    Future.delayed(const Duration(seconds: 2), () {
+      Get.offNamed('/login');
     });
   }
 
@@ -44,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
               aspectRatio: 1,
               child: Image.asset(Assets.images.icSplashLogoBg.path),
             ),
-            Expanded(flex: 1, child: const SizedBox()),
+            const Expanded(flex: 1, child: SizedBox()),
             Image.asset(Assets.images.icNameLogo.path, width: 67, height: 24),
             const SizedBox(height: 35),
             const Text('www.guangxingyun.com'),
