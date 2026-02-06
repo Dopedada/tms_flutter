@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
-import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:tms_flutter/app/constants/route_constants.dart';
 import 'package:tms_flutter/app/service/api_service.dart';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:tms_flutter/utils/hive_utils.dart';
 
 import 'package:tms_flutter/core/base/base_controller.dart';
 
@@ -89,13 +90,14 @@ class LoginController extends BaseController {
       verifyKey: _key,
     );
     _isLoggingIn.value = false;
-    if (!response.status) {
+    if (!response.status || response.data?.token == null) {
       showToast(response.desc);
       refreshVerifyCode();
       return;
     }
-    Hive.box('userBox').put('loginResponse', response.data);
+    await HiveUtils.saveUserInfo(response.data);
+    await HiveUtils.saveUserToken(response.data!.token!);
     showToast('登录成功');
-    Get.offNamed('/main');
+    Get.offNamed(RouteConstants.mine);
   }
 }

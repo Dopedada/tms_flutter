@@ -4,7 +4,7 @@ import 'package:tms_flutter/app/view/pages/login/login_controller.dart';
 import 'package:tms_flutter/app/view/widget/account_login_widget.dart';
 import 'package:tms_flutter/app/view/widget/login_tab_switch.dart';
 import 'package:tms_flutter/app/view/widget/phone_login_widget.dart';
-import 'package:tms_flutter/core/utils/assets_gen.dart';
+import 'package:tms_flutter/utils/assets_gen.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});

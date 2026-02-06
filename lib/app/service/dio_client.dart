@@ -7,10 +7,8 @@ class DioClient {
   factory DioClient() => _instance;
 
   late Dio _dio;
-  late Box _settingsBox;
 
   DioClient._internal() {
-    _settingsBox = Hive.box('settingsBox');
     _dio = Dio(
       BaseOptions(
         baseUrl: "http://8.146.199.121:9093/",
@@ -43,14 +41,13 @@ class DioClient {
     );
   }
 
-  void saveToken(String token) {
-    _settingsBox.put('token', token);
-    // 更新 header 中的 token
-    _dio.options.headers['TOKEN'] = token;
-  }
-
   String? getToken() {
-    return _settingsBox.get('token');
+    // 从名为 'settings' 的 Hive box 获取 token。
+    // 确保在使用 DioClient 之前已在 app 初始化时打开该 box（例如在 main.dart 中）。
+    if (Hive.isBoxOpen('settings')) {
+      return Hive.box('settings').get('token') as String?;
+    }
+    return null;
   }
 
   // GET 请求
