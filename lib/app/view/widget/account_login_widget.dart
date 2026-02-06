@@ -51,11 +51,7 @@ class _Accountloginwidget extends State<Accountloginwidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        LoginTextField(
-          title: "账号",
-          controller: _phoneController,
-          inputFormatters: [MaskTextInputFormatter(mask: "###-####-####")],
-        ),
+        LoginTextField(title: "账号", controller: _phoneController),
         const SizedBox(height: 20),
         LoginTextField(
           title: "图形验证码",

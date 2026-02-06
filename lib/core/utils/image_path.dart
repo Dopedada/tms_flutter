@@ -1,5 +1,1 @@
-
-
-class ImagePath {
-
-}
+class ImagePath {}

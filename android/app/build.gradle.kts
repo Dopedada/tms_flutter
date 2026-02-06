@@ -19,6 +19,21 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    signingConfigs {
+        // debug {
+        //     storeFile = file("gxy.keystore")
+        //     storePassword = "gxy2024"
+        //     keyAlias = "gxy2024"
+        //     keyPassword = "gxy2024"
+        // }
+        create("release") {
+            storeFile = file("gxy.keystore")
+            storePassword = "gxy2024"
+            keyAlias = "gxy2024"
+            keyPassword = "gxy2024"
+        }
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.tms_flutter"
@@ -32,9 +47,10 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }

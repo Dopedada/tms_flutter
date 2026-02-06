@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tms_flutter/core/utils/app_colors.dart';
-import 'package:tms_flutter/app/view/widget/login_text_field.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tms_flutter/app/view/pages/login/login_controller.dart';
+import 'package:tms_flutter/app/view/widget/login_text_field.dart';
+import 'package:tms_flutter/core/utils/app_colors.dart';
 
 class PhoneLoginWidget extends StatefulWidget {
   @Preview()

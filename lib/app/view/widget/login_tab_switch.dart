@@ -27,7 +27,9 @@ class _LoginTabSwitchState extends State<LoginTabSwitch> {
           AnimatedAlign(
             duration: const Duration(milliseconds: 220),
             curve: Curves.easeInOut,
-            alignment: _currentIndex == 0 ? Alignment.centerLeft : Alignment.centerRight,
+            alignment: _currentIndex == 0
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
             child: Container(
               width: 100, // 宽度通常是总宽的一半
               height: 40,
@@ -47,12 +49,7 @@ class _LoginTabSwitchState extends State<LoginTabSwitch> {
             ),
           ),
           // 文字按钮层
-          Row(
-            children: [
-              _buildTabItem("验证码登录", 0),
-              _buildTabItem("密码登录", 1),
-            ],
-          ),
+          Row(children: [_buildTabItem("验证码登录", 0), _buildTabItem("密码登录", 1)]),
         ],
       ),
     );

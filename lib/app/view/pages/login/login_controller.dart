@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:tms_flutter/app/service/api_service.dart';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -80,8 +81,21 @@ class LoginController extends BaseController {
     }
 
     _isLoggingIn.value = true;
-    print(
-      '登录参数: account=$_phone, password=$_password, imgCode=$_imgCode, verifyKey=$_key',
+
+    final response = await _apiService.login(
+      account: _phone,
+      password: _password,
+      imgCode: _imgCode,
+      verifyKey: _key,
     );
+    _isLoggingIn.value = false;
+    if (!response.status) {
+      showToast(response.desc);
+      refreshVerifyCode();
+      return;
+    }
+    Hive.box('userBox').put('loginResponse', response.data);
+    showToast('登录成功');
+    Get.offNamed('/main');
   }
 }

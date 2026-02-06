@@ -1,4 +1,5 @@
 import 'package:tms_flutter/app/model/api_response.dart';
+import 'package:tms_flutter/app/model/logistics_login_dto.dart';
 import 'package:tms_flutter/app/model/verify_code_data.dart';
 import 'package:tms_flutter/app/service/dio_client.dart';
 
@@ -26,7 +27,7 @@ class ApiService {
   }
 
   /// 登录
-  Future<ApiResponse<Map<String, dynamic>>> login({
+  Future<ApiResponse<LoginResponse>> login({
     required String account,
     required String password,
     required String imgCode,
@@ -34,21 +35,21 @@ class ApiService {
   }) async {
     try {
       final response = await _dioClient.post(
-        'tms/login/login',
+        'tms/login/doLogin',
         data: {
-          'account': account,
-          'password': password,
-          'imgCode': imgCode,
+          'loginName': account,
+          'pwd': password,
+          'verifyCode': imgCode,
           'verifyKey': verifyKey,
         },
       );
 
-      return ApiResponse<Map<String, dynamic>>.fromJson(
+      return ApiResponse<LoginResponse>.fromJson(
         response.data as Map<String, dynamic>,
-        (data) => data as Map<String, dynamic>,
+        (data) => LoginResponse.fromJson(data as Map<String, dynamic>),
       );
     } catch (e) {
-      return ApiResponse<Map<String, dynamic>>(
+      return ApiResponse<LoginResponse>(
         code: -1,
         data: null,
         desc: '登录请求失败: $e',
@@ -57,6 +58,4 @@ class ApiService {
       );
     }
   }
-
-  
 }
