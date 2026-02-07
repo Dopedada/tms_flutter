@@ -26,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
     // 3. 根据token是否为空判断跳转目标
     if (token != null && token.isNotEmpty) {
       // 有token：跳转到首页（offNamed关闭当前页，避免返回闪屏页）
-      Get.offNamed(RouteConstants.home);
+      Get.offNamed(RouteConstants.mine);
     } else {
       // 无token：跳转到登录页
       Get.offNamed(RouteConstants.login);

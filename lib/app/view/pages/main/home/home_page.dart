@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
-
+class HomePage extends StatefulWidget {
+  @Preview()
+  const HomePage({super.key});
   @override
   State<StatefulWidget> createState() {
-    return _HomepageState();
+    return _HomePageState();
   }
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

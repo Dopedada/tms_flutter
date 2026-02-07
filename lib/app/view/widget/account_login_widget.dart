@@ -25,6 +25,7 @@ class _Accountloginwidget extends State<Accountloginwidget> {
   void initState() {
     super.initState();
     _loginController = Get.find<LoginController>();
+    _phoneController.text = 'cdoub';
     // 同步输入到 controller
     _phoneController.addListener(() {
       _loginController.phone.value = _phoneController.text;

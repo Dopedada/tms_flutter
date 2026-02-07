@@ -4,8 +4,8 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:tms_flutter/app/constants/route_constants.dart';
 import 'package:tms_flutter/app/constants/storage_constants.dart';
 import 'package:tms_flutter/app/view/bindings/home_binding.dart';
-import 'package:tms_flutter/app/view/pages/home/home_page.dart';
-import 'package:tms_flutter/app/view/pages/main_page.dart';
+import 'package:tms_flutter/app/view/pages/main/home/home_page.dart';
+import 'package:tms_flutter/app/view/pages/main/main_page.dart';
 import 'package:tms_flutter/app/view/pages/splash_page.dart';
 import 'package:tms_flutter/app/view/pages/login/login_page.dart';
 import 'package:tms_flutter/app/view/bindings/login_binding.dart';
@@ -34,11 +34,6 @@ class MyApp extends StatelessWidget {
           name: RouteConstants.login,
           page: () => const LoginPage(),
           binding: LoginBinding(),
-        ),
-        GetPage(
-          name: RouteConstants.home,
-          page: () => const Homepage(),
-          binding: HomeBinding(),
         ),
         GetPage(name: RouteConstants.mine, page: () => const MainPage()),
       ],
