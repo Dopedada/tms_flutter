@@ -98,6 +98,6 @@ class LoginController extends BaseController {
     await HiveUtils.saveUserInfo(response.data);
     await HiveUtils.saveUserToken(response.data!.token!);
     showToast('登录成功');
-    Get.offNamed(RouteConstants.mine);
+    Get.offNamed(RouteConstants.main);
   }
 }

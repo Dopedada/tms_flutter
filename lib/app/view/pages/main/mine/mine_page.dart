@@ -6,7 +6,6 @@ import 'package:tms_flutter/utils/assets_gen.dart';
 
 class MinePage extends GetView<MineController> {
   const MinePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -94,13 +93,37 @@ class MinePage extends GetView<MineController> {
             ),
             child: Column(
               children: [
-                MineItemWidget(title: "个人资料", name: "张三"),
-                MineItemWidget(title: "修改密码", name: "修改登录密码"),
-                MineItemWidget(title: "关于我们", name: "版本V1.0.0"),
+                MineItemWidget(
+                  title: "个人资料",
+                  name: "张三",
+                  onTap: () {
+                    controller.showToast('点击了个人资料');
+                  },
+                ),
+                MineItemWidget(
+                  title: "修改密码",
+                  name: "修改登录密码",
+                  onTap: () {
+                    // 处理修改密码点击事件
+                    controller.showToast('修改登录密码');
+                  },
+                ),
+                MineItemWidget(
+                  title: "关于我们",
+                  name: "版本V1.0.0",
+                  onTap: () {
+                    // 处理关于我们点击事件
+                    controller.showToast('关于我们');
+                  },
+                ),
                 MineItemWidget(
                   title: "帮助与反馈",
                   name: "常见问题解答",
                   isShowLine: false,
+                  onTap: () {
+                    // 处理帮助与反馈点击事件
+                    controller.showToast('帮助与反馈');
+                  },
                 ),
               ],
             ),

@@ -19,4 +19,7 @@ class RouteConstants {
 
   // 登录页
   static const String login = '/login';
+
+  // 
+  static const String main = '/main';
 }
