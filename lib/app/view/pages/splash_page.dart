@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:tms_flutter/app/constants/route_constants.dart';
 import 'package:tms_flutter/utils/assets_gen.dart';
 import 'package:tms_flutter/utils/hive_utils.dart';
