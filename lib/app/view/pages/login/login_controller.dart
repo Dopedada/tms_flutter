@@ -9,18 +9,23 @@ import 'package:tms_flutter/core/base/base_controller.dart';
 
 class LoginController extends BaseController {
   final Rx<int> _index = Rx<int>(0);
+
   int get index => _index.value;
 
   final Rx<Uint8List?> _verifyCodeImg = Rx<Uint8List?>(null);
+
   Uint8List? get verifyCodeImg => _verifyCodeImg.value;
 
   final Rx<String?> _verifyKey = Rx<String?>(null);
+
   String? get verifyKey => _verifyKey.value;
 
   final Rx<bool> _isLoadingVerifyCode = Rx<bool>(false);
+
   bool get isLoadingVerifyCode => _isLoadingVerifyCode.value;
 
   final Rx<bool> _isLoggingIn = Rx<bool>(false);
+
   bool get isLoggingIn => _isLoggingIn.value;
 
   final _apiService = ApiService();
@@ -95,7 +100,9 @@ class LoginController extends BaseController {
       refreshVerifyCode();
       return;
     }
-    await HiveUtils.saveUserInfo(response.data);
+    Map<String, dynamic>? jm = response.data?.toJson();
+    String s = json.encode(jm);
+    await HiveUtils.saveUserInfo(s);
     await HiveUtils.saveUserToken(response.data!.token!);
     showToast('登录成功');
     Get.offNamed(RouteConstants.main);

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widget_previews.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:tms_flutter/app/view/pages/main/home/home_controller.dart';
+import 'package:tms_flutter/utils/assets_gen.dart';
 
 class HomePage extends GetView<HomeController> {
-  @Preview()
   const HomePage({super.key});
 
   @override
@@ -22,11 +21,17 @@ class _HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<_HomePageContent> {
   late ScrollController _scrollController;
-
+  late HomeController _homeController;
+  final RxnDouble _scrollOffset = RxnDouble(0.0); // 新增响应式变量
   @override
   void initState() {
     super.initState();
+    _homeController = Get.find<HomeController>();
     _scrollController = ScrollController();
+    // 新增滚动监听
+    _scrollController.addListener(() {
+      _scrollOffset.value = _scrollController.offset;
+    });
   }
 
   @override
@@ -43,94 +48,99 @@ class _HomePageContentState extends State<_HomePageContent> {
           CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  SizedBox(
-                    height: 200,
-                    child: Container(
-                      color: Colors.grey.shade100,
-                      alignment: Alignment.center,
-                      child: const Text("SliverList（高度限制为200）"),
+              SliverAppBar(
+                toolbarHeight: 75,
+                backgroundColor: Colors.blue,
+                elevation: 0,
+                pinned: true,
+                // 关键：SliverAppBar固定在顶部
+                floating: false,
+                expandedHeight: 250,
+                // 与TopWidget高度一致ˇ
+                collapsedHeight: 75,
+                // 折叠/展开时的标题样式（替代原opacity逻辑）
+                title: Obx(() {
+                  double offset = _scrollOffset.value ?? 0.0;
+                  double opacity = (offset / 200).clamp(0.0, 1.0);
+                  return Text(
+                    _homeController.logisticsName,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black.withOpacity(opacity),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                }),
+                // 核心：通过flexibleSpace实现渐变背景
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      // 自定义渐变颜色（示例：从深蓝到浅蓝）
+                      colors: [
+                        Color(0xFFb8daff),
+                        Colors.white,
+                      ],
+                      begin: Alignment.topCenter, // 渐变起始位置
+                      end: Alignment.bottomCenter, // 渐变结束位置
+                      // 可选：设置渐变角度/比例
+                      // stops: [0.0, 0.5, 1.0],
                     ),
                   ),
-                ]),
+                  child: FlexibleSpaceBar(
+                    // 渐变背景上显示TopWidget
+                    background: TopWidget(
+                      onTap: (int i) {
+                        _homeController.showToast(i.toString());
+                      },
+                    ),
+                    collapseMode: CollapseMode.pin,
+                  ),
+                ),
               ),
+
               SliverPersistentHeader(
                 pinned: true,
-                delegate: _StickyHeaderDelegate(title: "账户设置"),
+                delegate: _StickyHeaderDelegate(title: "自营计划"),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = ["个人资料", "修改密码", "账号安全"];
+                  List<String> items = [
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                    "个人资料",
+                    "修改密码",
+                    "账号安全",
+                  ];
                   return _buildListItem(items[index]);
-                }, childCount: 3),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _StickyHeaderDelegate(title: "系统设置"),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = ["关于我们", "帮助与反馈", "隐私设置"];
-                  return _buildListItem(items[index]);
-                }, childCount: 3),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _StickyHeaderDelegate(title: "系统设置2"),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = ["关于我们", "帮助与反馈", "隐私设置"];
-                  return _buildListItem(items[index]);
-                }, childCount: 3),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _StickyHeaderDelegate(title: "系统设置3"),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = ["关于我们", "帮助与反馈", "隐私设置"];
-                  return _buildListItem(items[index]);
-                }, childCount: 3),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _StickyHeaderDelegate(title: "系统设置4"),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = ["关于我们", "帮助与反馈", "隐私设置"];
-                  return _buildListItem(items[index]);
-                }, childCount: 3),
+                }, childCount: 30),
               ),
             ],
-          ),
-          AnimatedBuilder(
-            animation: _scrollController,
-            builder: (context, _) {
-              double opacity = (_scrollController.hasClients
-                  ? (_scrollController.offset / 200).clamp(0.0, 1.0)
-                  : 0.0);
-
-              return Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AppBar(
-                  toolbarHeight: 75,
-                  title: Text(
-                    "限制SliverFillRemaining高度",
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: opacity),
-                    ),
-                  ),
-                  backgroundColor: Colors.blue.withValues(alpha: opacity),
-                  elevation: opacity > 0 ? 4 : 0,
-                ),
-              );
-            },
           ),
         ],
       ),
@@ -162,13 +172,17 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      height: 48,
-      color: Colors.grey.shade100,
+      height: 52,
+      color: Colors.white,
       padding: const EdgeInsets.only(left: 16),
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
       ),
     );
   }
@@ -182,5 +196,80 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) {
     return oldDelegate.title != title;
+  }
+}
+
+class TopWidget extends StatelessWidget {
+  final Function(int) onTap;
+
+  const TopWidget({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(width: double.infinity, height: 250),
+
+        Positioned(
+          child: Image.asset(
+            Assets.images.icHomeBg.path,
+            height: 185,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        Positioned(
+          top: 165,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            height: 85,
+            width: double.infinity,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => onTap(0),
+                    child: Image.asset(Assets.images.icHomeContract.path),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => onTap(1),
+                    child: Image.asset(Assets.images.icHomePlan.path),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => onTap(2),
+                    child: Image.asset(Assets.images.icHomeCar.path),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => onTap(3),
+                    child: Image.asset(Assets.images.icHomeBill.path),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
