@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class WorkPage extends StatelessWidget{
+class WorkPage extends StatelessWidget {
   const WorkPage({super.key});
 
   @override

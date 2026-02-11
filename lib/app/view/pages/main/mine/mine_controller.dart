@@ -6,6 +6,4 @@ import 'dart:typed_data';
 
 import 'package:tms_flutter/core/base/base_controller.dart';
 
-class MineController extends BaseController {
-  
-}
+class MineController extends BaseController {}

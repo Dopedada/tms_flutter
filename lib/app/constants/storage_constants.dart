@@ -9,5 +9,4 @@ class StorageConstants {
   static const String userInfo = 'user_info';
 
   static const String userBox = 'user_box';
-
 }

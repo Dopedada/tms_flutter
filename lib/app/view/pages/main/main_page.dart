@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.home), // 图标
             label: '首页', // 文字
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: '消息'),
+          BottomNavigationBarItem(icon: Icon(Icons.work), label: '工作台'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: '我的'),
         ],
       ),

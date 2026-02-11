@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tms_flutter/app/model/home_list_entity.dart';
+import 'package:tms_flutter/app/view/item/home_list_item.dart';
 import 'package:tms_flutter/app/view/pages/main/home/home_controller.dart';
+import 'package:tms_flutter/utils/app_colors.dart';
 import 'package:tms_flutter/utils/assets_gen.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -43,6 +46,7 @@ class _HomePageContentState extends State<_HomePageContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.ColorF0F0F0,
       body: Stack(
         children: [
           CustomScrollView(
@@ -77,10 +81,7 @@ class _HomePageContentState extends State<_HomePageContent> {
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       // 自定义渐变颜色（示例：从深蓝到浅蓝）
-                      colors: [
-                        Color(0xFFb8daff),
-                        Colors.white,
-                      ],
+                      colors: [Color(0xFFb8daff), Colors.white],
                       begin: Alignment.topCenter, // 渐变起始位置
                       end: Alignment.bottomCenter, // 渐变结束位置
                       // 可选：设置渐变角度/比例
@@ -103,58 +104,21 @@ class _HomePageContentState extends State<_HomePageContent> {
                 pinned: true,
                 delegate: _StickyHeaderDelegate(title: "自营计划"),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  List<String> items = [
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                    "个人资料",
-                    "修改密码",
-                    "账号安全",
-                  ];
-                  return _buildListItem(items[index]);
-                }, childCount: 30),
+              Obx(
+                () => SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    // 空值保护
+                    if (index >= _homeController.homeList.length) {
+                      return const SizedBox.shrink();
+                    }
+                    return HomeListItem(data: _homeController.homeList[index]);
+                  }, childCount: _homeController.homeList.length),
+                ),
               ),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  // 通用列表项构建方法
-  Widget _buildListItem(String title) {
-    return Container(
-      height: 56,
-      color: Colors.white,
-      padding: const EdgeInsets.only(left: 16),
-      alignment: Alignment.centerLeft,
-      child: Text(title),
     );
   }
 }
@@ -188,10 +152,10 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 48;
+  double get maxExtent => 52;
 
   @override
-  double get minExtent => 48;
+  double get minExtent => 52;
 
   @override
   bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) {

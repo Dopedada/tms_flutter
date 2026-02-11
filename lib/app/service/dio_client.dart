@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:tms_flutter/app/constants/storage_constants.dart';
 
 class DioClient {
   // 单例模式
@@ -44,8 +46,22 @@ class DioClient {
   String? getToken() {
     // 从名为 'settings' 的 Hive box 获取 token。
     // 确保在使用 DioClient 之前已在 app 初始化时打开该 box（例如在 main.dart 中）。
-    if (Hive.isBoxOpen('settings')) {
-      return Hive.box('settings').get('token') as String?;
+    try {
+      bool isOpen = Hive.isBoxOpen(StorageConstants.userBox);
+      print("🔍 Hive box 是否打开: $isOpen");
+
+      if (isOpen) {
+        var box = Hive.box(StorageConstants.userBox);
+        print("📦 Box 中的所有数据: ${box.toMap()}");
+
+        String? token = box.get(StorageConstants.userToken) as String?;
+        print("🔑 获取的 token: $token");
+        return token;
+      } else {
+        print("⚠️ Hive box 未打开!");
+      }
+    } catch (e) {
+      print("❌ 获取 token 出错: $e");
     }
     return null;
   }
@@ -71,6 +87,20 @@ class DioClient {
       data: data,
       queryParameters: queryParameters,
       options: options,
+    );
+  }
+
+  // POST 请求
+  Future<Response> postEncoded(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    return _dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
   }
 
