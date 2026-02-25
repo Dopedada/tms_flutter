@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tms_flutter/app/model/home_list_entity.dart';
 import 'package:tms_flutter/app/view/item/home_list_item.dart';
 import 'package:tms_flutter/app/view/pages/main/home/home_controller.dart';
 import 'package:tms_flutter/utils/app_colors.dart';
@@ -23,9 +22,13 @@ class _HomePageContent extends StatefulWidget {
 }
 
 class _HomePageContentState extends State<_HomePageContent> {
+  // 滚动相关
+  static const double scrollOpacityThreshold = 200.0;
+
   late ScrollController _scrollController;
   late HomeController _homeController;
-  final RxnDouble _scrollOffset = RxnDouble(0.0); // 新增响应式变量
+  final RxnDouble _scrollOffset = RxnDouble(0.0);
+
   @override
   void initState() {
     super.initState();
@@ -62,20 +65,9 @@ class _HomePageContentState extends State<_HomePageContent> {
                 expandedHeight: 250,
                 // 与TopWidget高度一致ˇ
                 collapsedHeight: 75,
-                // 折叠/展开时的标题样式（替代原opacity逻辑）
-                title: Obx(() {
-                  double offset = _scrollOffset.value ?? 0.0;
-                  double opacity = (offset / 200).clamp(0.0, 1.0);
-                  return Text(
-                    _homeController.logisticsName,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black.withOpacity(opacity),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  );
-                }),
+
+                title: _buildAppBarTitle(),
+
                 // 核心：通过flexibleSpace实现渐变背景
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(
@@ -120,6 +112,25 @@ class _HomePageContentState extends State<_HomePageContent> {
         ],
       ),
     );
+  }
+
+  Widget _buildAppBarTitle() {
+    return Obx(() {
+      final offset = _scrollOffset.value ?? 0.0;
+      // 优化过渡曲线：使用curved值让透明度变化更自然
+      final curvedOpacity = Curves.easeInOut.transform(
+        (offset / scrollOpacityThreshold).clamp(0.0, 1.0),
+      );
+      return Text(
+        _homeController.logisticsName,
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.black.withOpacity(curvedOpacity),
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    });
   }
 }
 

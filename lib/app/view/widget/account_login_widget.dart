@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:tms_flutter/app/constants/storage_constants.dart';
 import 'package:tms_flutter/app/view/pages/login/login_controller.dart';
 import 'package:tms_flutter/app/view/widget/login_text_field.dart';
 import 'package:tms_flutter/utils/app_colors.dart';
+import 'package:tms_flutter/utils/storage_utils.dart';
 
-class Accountloginwidget extends StatefulWidget {
-  const Accountloginwidget({super.key});
+class AccountLoginWidget extends StatefulWidget {
+  const AccountLoginWidget({super.key});
 
   @override
-  State<StatefulWidget> createState() => _Accountloginwidget();
+  State<StatefulWidget> createState() => _AccountLoginWidget();
 }
 
-class _Accountloginwidget extends State<Accountloginwidget> {
-  late final TextEditingController _phoneController = TextEditingController();
+class _AccountLoginWidget extends State<AccountLoginWidget> {
+  late final TextEditingController _phoneController;
+
   late final TextEditingController _captchaController = TextEditingController();
   late final TextEditingController _codeController = TextEditingController();
 
@@ -25,7 +27,9 @@ class _Accountloginwidget extends State<Accountloginwidget> {
   void initState() {
     super.initState();
     _loginController = Get.find<LoginController>();
-    _phoneController.text = 'cdoub';
+    _phoneController = TextEditingController(
+      text: StorageUtil.getString(StorageConstants.userName),
+    );
     // 同步输入到 controller
     _phoneController.addListener(() {
       _loginController.phone.value = _phoneController.text;

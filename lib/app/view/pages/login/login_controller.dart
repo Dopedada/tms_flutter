@@ -1,11 +1,13 @@
-import 'package:get/get.dart';
-import 'package:tms_flutter/app/constants/route_constants.dart';
-import 'package:tms_flutter/app/service/api_service.dart';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:tms_flutter/utils/hive_utils.dart';
 
+import 'package:get/get.dart';
+import 'package:tms_flutter/app/constants/route_constants.dart';
+import 'package:tms_flutter/app/constants/storage_constants.dart';
+import 'package:tms_flutter/app/service/api_service.dart';
 import 'package:tms_flutter/core/base/base_controller.dart';
+import 'package:tms_flutter/utils/hive_utils.dart';
+import 'package:tms_flutter/utils/storage_utils.dart';
 
 class LoginController extends BaseController {
   final Rx<int> _index = Rx<int>(0);
@@ -39,6 +41,7 @@ class LoginController extends BaseController {
   void onInit() {
     super.onInit();
     _getVerifyCode();
+    phone.value = StorageUtil.getString(StorageConstants.userName);
   }
 
   Future<void> _getVerifyCode() async {
@@ -104,6 +107,8 @@ class LoginController extends BaseController {
     String s = json.encode(jm);
     await HiveUtils.saveUserInfo(s);
     await HiveUtils.saveUserToken(response.data!.token!);
+    await StorageUtil.setString(StorageConstants.userName, _phone);
+
     showToast('登录成功');
     Get.offNamed(RouteConstants.main);
   }

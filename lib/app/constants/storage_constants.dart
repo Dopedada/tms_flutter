@@ -2,11 +2,11 @@
 class StorageConstants {
   StorageConstants._();
 
-  // 用户token
   static const String userToken = 'user_token';
 
-  // 用户信息
   static const String userInfo = 'user_info';
 
   static const String userBox = 'user_box';
+
+  static const String userName = 'user_name';
 }

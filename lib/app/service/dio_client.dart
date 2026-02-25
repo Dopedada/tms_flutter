@@ -1,11 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:tms_flutter/app/constants/storage_constants.dart';
+import 'package:tms_flutter/utils/hive_utils.dart';
+
+import '../constants/route_constants.dart';
 
 class DioClient {
   // 单例模式
   static final DioClient _instance = DioClient._internal();
+
   factory DioClient() => _instance;
 
   late Dio _dio;
@@ -19,7 +24,7 @@ class DioClient {
         headers: {
           "Content-Type": "application/json",
           "CLIENT": "2",
-          "TOKEN": getToken() ?? "",
+          "TOKEN": "",
         },
       ),
     );
@@ -28,15 +33,27 @@ class DioClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          print("请求开始：${options.uri}");
+          final token = getToken();
+          if (token != null && token.isNotEmpty) {
+            options.headers["TOKEN"] = token;
+          }
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          print("请求成功：${response.data}");
+          // logger.e(response.data);
+          if (response.data != null) {
+            final code = response.data['code'] ?? 0;
+            // 匹配账号异地登录的场景
+            if (code == -99) {
+              // 1. 清空本地Token（可选，避免下次请求仍带失效Token）
+              HiveUtils.removeUserToken();
+              // 2. 跳转到登录页并销毁所有页面
+              Get.offAllNamed(RouteConstants.login);
+            }
+          }
           return handler.next(response);
         },
         onError: (error, handler) {
-          print("请求失败：${error.message}");
           return handler.next(error);
         },
       ),
@@ -44,26 +61,18 @@ class DioClient {
   }
 
   String? getToken() {
-    // 从名为 'settings' 的 Hive box 获取 token。
-    // 确保在使用 DioClient 之前已在 app 初始化时打开该 box（例如在 main.dart 中）。
     try {
       bool isOpen = Hive.isBoxOpen(StorageConstants.userBox);
-      print("🔍 Hive box 是否打开: $isOpen");
-
       if (isOpen) {
         var box = Hive.box(StorageConstants.userBox);
-        print("📦 Box 中的所有数据: ${box.toMap()}");
-
         String? token = box.get(StorageConstants.userToken) as String?;
-        print("🔑 获取的 token: $token");
         return token;
       } else {
-        print("⚠️ Hive box 未打开!");
+        return null;
       }
     } catch (e) {
-      print("❌ 获取 token 出错: $e");
+      return null;
     }
-    return null;
   }
 
   // GET 请求

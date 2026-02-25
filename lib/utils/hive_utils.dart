@@ -159,4 +159,7 @@ class HiveUtils {
     boxName: StorageConstants.userBox,
     key: StorageConstants.userToken,
   );
+
+  static Future<bool> removeUserToken() =>
+      delete(boxName: StorageConstants.userBox, key: StorageConstants.userToken);
 }

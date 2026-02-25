@@ -32,7 +32,7 @@ class LoginPage extends GetView<LoginController> {
                     if (controller.index == 0)
                       PhoneLoginWidget()
                     else
-                      Accountloginwidget(),
+                      AccountLoginWidget(),
 
                     SizedBox(height: 10),
 

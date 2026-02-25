@@ -41,6 +41,8 @@ dependencies:
   get: ^4.7.3
   json_annotation: ^4.10.0
   fluttertoast: ^9.0.0
+  shared_preferences: ^2.5.4
+  logger: ^2.6.2
 
 
 dev_dependencies:
